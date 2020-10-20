@@ -37,7 +37,7 @@ const Login = (props) => {
                 console.log(login);
                 setLogin(response.data);
                 form.resetFields();
-                props.history.push("/priority");
+                props.history.push("/timesheet");
                 window.location.reload();
             })
             .catch(err => {
