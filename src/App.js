@@ -13,10 +13,12 @@ import Signup from "./pages/SignUp";
 function App() {
     const { Header, Content, Footer } = Layout;
     const [currentUser, setCurrentUser] = useState(undefined);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
-
+        const logged = AuthService.isLoggedIn();
+        setLoggedIn(logged);
         if (user) {
             setCurrentUser(user);
         }
@@ -24,6 +26,8 @@ function App() {
 
     const logOut = () => {
         AuthService.logout();
+        setCurrentUser(undefined);
+        setLoggedIn(AuthService.isLoggedIn());
     };
 
     return (
@@ -32,20 +36,32 @@ function App() {
                 <Header>
                     <div className="logo" />
                     <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                        
                         <Menu.Item key="1">
-                            <Link to={"/login"} className="nav-link">
-                                Login
+                            <Link to={"/"} className="nav-link">
+                                Home
                             </Link>
                         </Menu.Item>
+
                         <Menu.Item key="2">
-                            <Link to={"/signup"} className="nav-link">
-                                Sign up
+                            {!loggedIn ?
+                                <Link to={"/signup"} className="nav-link">
+                                    Sign up
                             </Link>
+                                :
+                                <></>
+                            }
                         </Menu.Item>
                         <Menu.Item key="3">
-                            <Link to={"/logout"} className="nav-link"  onClick={logOut}>
+                            {!loggedIn ?
+                                <Link to={"/login"} className="nav-link">
+                                    Login
+                                </Link>
+                                :
+                                <Link to={"/logout"} className="nav-link" onClick={logOut}>
                                     LogOut
                             </Link>
+                            }
                         </Menu.Item>
                     </Menu>
                 </Header>

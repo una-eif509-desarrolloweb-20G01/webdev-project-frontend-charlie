@@ -33,11 +33,9 @@ const Login = (props) => {
     const loginMethod = () => {
         AuthService.login(login)
             .then(response => {
-
-                console.log(login);
                 setLogin(response.data);
                 form.resetFields();
-                props.history.push("/timesheet");
+                props.history.push("/");
                 window.location.reload();
             })
             .catch(err => {
