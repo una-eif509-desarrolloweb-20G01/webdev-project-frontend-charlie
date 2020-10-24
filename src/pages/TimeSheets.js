@@ -20,7 +20,7 @@ const TimeSheet = (props) => {
      */
 
     useEffect(() => {
-        getAllPrioritiesMethod();
+        //getAllPrioritiesMethod();
     },);
 
     /** Service methods **/

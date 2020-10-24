@@ -12,6 +12,7 @@ const login = data => {
             if (response.headers.authorization) {
                 localStorage.setItem("user.headers", JSON.stringify(response.headers));
                 localStorage.setItem("user.data", JSON.stringify(response.data));
+                console.log(JSON.parse(localStorage.getItem("user")))
             }
             return response.data;
         });
@@ -25,9 +26,15 @@ const getCurrentUser = () => {
     return JSON.parse(localStorage.getItem("user"));
 };
 
+const isLoggedIn = () => {
+    return JSON.parse(localStorage.getItem("user.headers")) ? true : false;
+};
+
+
 export default {
     signup,
     login,
     logout,
     getCurrentUser,
+    isLoggedIn
 };
