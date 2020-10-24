@@ -8,8 +8,8 @@ import AuthService from "./services/auth.service";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import TimeSheet from "./pages/TimeSheets";
-import Signup from "./pages/SignUp";
-import Department from "./pages/Department";
+import Signup from "./pages/signup/SignUp";
+import Department from "./pages/department/Department";
 
 function App() {
     const { Header, Content, Footer } = Layout;

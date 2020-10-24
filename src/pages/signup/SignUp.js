@@ -1,32 +1,36 @@
 import React from "react";
 import { Form, Alert, Input, Button, Select } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons';
-import UserService from "../services/user.service";
-import DepartmentService from "../services/deparment.service";
-import RoleService from "../services/role.service";
+import UserService from "../../services/user.service";
+import DepartmentService from "../../services/deparment.service";
+import RoleService from "../../services/role.service";
+import './SignUp.css';
 const { Option } = Select;
 const layout = {
     labelCol: {
-        span: 2,
+        offset: 0,
+        span: 24
     },
     wrapperCol: {
-        span: 3,
+        offset: 0,
+        span: 3
     },
 };
 
 const tailLayout = {
     wrapperCol: {
-        offset: 2,
-        span: 8,
+        offset: 0,
+        span: 0,
     },
 };
 
 const roles = [];
 class Signup extends React.Component {
-    constructor(props){
+    formRef = React.createRef();
+    constructor(props) {
         super(props)
-        this.state ={
-            user : {
+        this.state = {
+            user: {
                 "id": null,
                 "firstName": "",
                 "lastName": "",
@@ -39,78 +43,64 @@ class Signup extends React.Component {
                 "createDate": "2020-08-31T00:23:52.000+00:00",
                 "enabled": true,
                 "tokenExpired": false,
-                "roleList": [
-                    {
-                        "idRole": 1,
-                        "name": "ROLE_ADMIN"
-                    }
-                ]
+                "roleList": []
             },
-            departments : [],
-            roles : [{idRole : "1", name: "ROLE_ADMIN"},{idRole : "2", name: "ROLE_USER"}],
-            error : false
+            departments: [],
+            roles: [],
+            error: false
         }
         this.getAllDeparments()
         this.getAllRoles()
     }
-    handleMultiSelectChange(value) {
-        console.log(`selected ${value}`);
-    }
 
-    getAllDeparments(){
-        DepartmentService.getAll().then(data =>{
-            var array = [] 
+    getAllDeparments() {
+        DepartmentService.getAll().then(data => {
+            var array = []
             array.push(...data.data);
-            this.setState({departments : array})
+            this.setState({ departments: array })
             console.log(this.state.departments)
         })
-        
+
     }
-    getAllRoles(){
-        RoleService.getAll().then(data =>{
-            var array = [] 
+    getAllRoles() {
+        RoleService.getAll().then(data => {
+            var array = []
             array.push(...data.data);
-            this.setState({roles : array})
+            this.setState({ roles: array })
             console.log(this.state.roles)
         })
-        
+
     }
-    listDepartmentOptions(data){
+    listDepartmentOptions(data) {
         var array = []
-        
+
         data.forEach(element => {
             array.push(<Option key={element.id}>{element.nombre}</Option>)
         });
-                    
+
         return array;
     }
-    listRolesOptions(data){
+    listRolesOptions(data) {
         var array = []
-        
+
         data.forEach(element => {
             array.push(<Option key={element.idRole}>{element.name}</Option>)
         });
-                    
+
         return array;
     }
     render() {
-        //const [form] = Form.useForm()
-        /**
-         * React Hooks
-         * https://reactjs.org/docs/hooks-reference.html
-         */
-
         /** Service methods **/
         const signUpMethod = () => {
             UserService.signup(this.state.user)
                 .then(response => {
-                    this.setState({user : response.data});
-                    Form.useForm.resetFields();
-                    this.setState({error : false});
+                    this.setState({ user: response.data });
+                    this.formRef.current.resetFields();
+                    this.setState({ error: false });
                 })
                 .catch(err => {
                     console.log(err);
-                    this.setState({error : err})
+                    this.setState({ error: err })
                 });
         }
 
@@ -118,7 +108,7 @@ class Signup extends React.Component {
 
         const handleInputChange = event => {
             let { name, value } = event.target;
-            this.setState({user : { ...this.state.user, [name]: value }});
+            this.setState({ user: { ...this.state.user, [name]: value } });
         };
 
         /** General Methods **/
@@ -129,29 +119,23 @@ class Signup extends React.Component {
         };
 
         const onReset = () => {
-            this.setState({user : this.user});
-            Form.useForm.resetFields();
+            this.setState({ user: this.state.user });
+            this.formRef.current.resetFields();
         };
         const onDepartmentChange = (value) => {
-            switch (value) {
-                case 'male':
-                    alert("Male")
-                    return;
-
-                case 'female':
-                    alert("Female")
-                    return;
-
-                case 'other':
-                    alert("Other")
-                    return;
-                default:return;
-            }
+            this.setState({ department: { id: value } })
         };
+        const handleMultiSelectChange = (value) => {
+            let list = [];
+            for (const val of value) {
+                list.push({ idRole: val })
+            }
+            this.state.user.roleList = list
+        }
 
         return (
             <div>
-                <Form {...layout} /*form={form}*/ name="control-hooks" onFinish={onFinish}>
+                <Form {...layout} ref={this.formRef} name="control-hooks" onFinish={onFinish}>
                     <Form.Item
                         name="firstName"
                         label="First Name"
@@ -261,14 +245,14 @@ class Signup extends React.Component {
                             allowClear
                             style={{ width: '100%' }}
                             placeholder="Please select the roles"
-                            onChange={this.handleMultiSelectChange}
+                            onChange={handleMultiSelectChange}
                         >
-                             {this.listRolesOptions(this.state.roles)}
+                            {this.listRolesOptions(this.state.roles)}
                         </Select>
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" id="submit-btn">
                             Submit
                         </Button>
                         <Button htmlType="button" onClick={onReset}>

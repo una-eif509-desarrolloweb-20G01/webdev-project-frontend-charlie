@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Table, Form, Input, Button, Popconfirm } from "antd";
-import FormItem from "antd/lib/form/FormItem";
-import DepartamentService from "../services/deparment.service";
-
+import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons';
+import DepartamentService from "../../services/deparment.service";
+import './Department.css';
 const initialDepartmentListState = [{ id: 0, nombre: "d" }];
 
 const layout = {
   labelCol: {
-    span: 2,
+    span: 0,
   },
   wrapperCol: {
-    span: 3,
+    span: 4,
   },
 };
 
@@ -25,8 +25,8 @@ const Departament = (props) => {
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
-      getAllDepartmentsMethod();
-  },[]);
+    getAllDepartmentsMethod();
+  }, []);
 
   /** Service methods **/
   const getAllDepartmentsMethod = () => {
@@ -58,9 +58,9 @@ const Departament = (props) => {
       title: 'Action',
       dataIndex: (Department) => Department.id,
       render: (Department, record) =>
-          <Popconfirm title="Sure to delete?" onConfirm={() => deleteDepartmentMethod(record.id)}>
-            <a>Delete</a>
-          </Popconfirm>
+        <Popconfirm title="Sure to delete?" onConfirm={() => deleteDepartmentMethod(record.id)}>
+          <a>Delete</a>
+        </Popconfirm>
     },
   ];
 
@@ -74,9 +74,9 @@ const Departament = (props) => {
   };
 
   /** General Methods **/
-  
+
   const saveDepartmentMethod = () => {
-    let data = { 'nombre': inputName}
+    let data = { 'nombre': inputName }
     DepartamentService.create(data)
       .then((response) => {
         console.log(response.data);
@@ -121,29 +121,25 @@ const Departament = (props) => {
       <Table rowKey={DepartmentList => DepartmentList.id} columns={columns} dataSource={DepartmentList} />
       <h2>Detalles de Departamentos</h2>
       <Form {...layout} form={form} name="control-hooks">
-        <FormItem
+        <Form.Item
           name="name"
           label="Name"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
+          rules={[{ required: true }]}
         >
-          <Input 
-          name="name"
-          onChange={handleInputChange}
-          placeholder="Nombre del Departamento"
+          <Input
+            name="name"
+            onChange={handleInputChange}
+            placeholder="Nombre del departamento"
           />
-        </FormItem>
-        <FormItem>
+        </Form.Item>
+        <Form.Item>
           <Button type="primary" onClick={saveDepartmentMethod}>
             Save
           </Button>
           <Button type="primary" onClick={onReset} danger>
             Cancel
           </Button>
-        </FormItem>
+        </Form.Item>
       </Form>
       {error ? (
         <Alert
