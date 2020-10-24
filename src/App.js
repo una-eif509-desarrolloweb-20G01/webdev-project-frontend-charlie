@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import TimeSheet from "./pages/TimeSheets";
 import Signup from "./pages/SignUp";
+import Department from "./pages/Department";
 
 function App() {
     const { Header, Content, Footer } = Layout;
@@ -47,6 +48,11 @@ function App() {
                                     LogOut
                             </Link>
                         </Menu.Item>
+                        <Menu.Item key="4">
+                            <Link to={"/department"} className="nav-link">
+                                Departamento
+                            </Link>
+                        </Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
@@ -59,6 +65,7 @@ function App() {
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/timesheet" component={TimeSheet} />
                             <Route exact path="/signup" component={Signup} />
+                            <Route exact path="/department" component={Department} />
                         </Switch>
                     </div>
                 </Content>
