@@ -73,7 +73,7 @@ const Departament = (props) => {
 
   const saveDepartmentMethod = () => {
     if (inputName.trim() === "") {
-      alert("El nombres esta vacio o solo tiene espacios en blanco")
+      alert("El nombre esta vacio o solo tiene espacios en blanco")
       setError(true)
     } else {
       let data = { 'nombre': inputName }
