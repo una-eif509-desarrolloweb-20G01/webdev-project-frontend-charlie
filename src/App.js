@@ -36,16 +36,17 @@ return (
     <Layout className="layout">
         <Header>
             <div className="logo" />
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
 
-                <Menu.Item key="1">
-                    <Link to={"/"} className="nav-link">
-                    Home
-                    </Link>
-                </Menu.Item>
+              {   !loggedIn ?
 
-                {!loggedIn ?
-                <>
+                < Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+
+                    <Menu.Item key="1">
+                        <Link to={"/"} className="nav-link">
+                        Home
+                        </Link>
+                    </Menu.Item>
+
                     <Menu.Item key="2">
                         <Link to={"/signup"} className="nav-link">
                         Sign up
@@ -57,22 +58,33 @@ return (
                         Login
                         </Link>
                     </Menu.Item>
-                </> :
+                </Menu>
 
-                <Menu.Item key="2">
-                    <Link to={"/logout"} className="nav-link" onClick={logOut}>
-                    LogOut
-                    </Link>
-                </Menu.Item>
-                }
+                :
 
-                
-                <Menu.Item key="4">
-                    <Link to={"/department"} className="nav-link">
-                    Departamento
-                    </Link>
-                </Menu.Item>
-            </Menu>
+                < Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+
+                    <Menu.Item key="1">
+                        <Link to={"/"} className="nav-link">
+                        Home
+                        </Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="2">
+                        <Link to={"/department"} className="nav-link">
+                        Departamento
+                        </Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="3">
+                        <Link to={"/logout"} className="nav-link" onClick={logOut}>
+                        LogOut
+                        </Link>
+                    </Menu.Item>
+                </Menu>
+
+            }
+
         </Header>
         <Content style={{ padding: '0 50px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
