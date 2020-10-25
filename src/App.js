@@ -12,83 +12,86 @@ import Signup from "./pages/signup/SignUp";
 import Department from "./pages/department/Department";
 
 function App() {
-    const { Header, Content, Footer } = Layout;
-    const [currentUser, setCurrentUser] = useState(undefined);
-    const [loggedIn, setLoggedIn] = useState(false);
+const { Header, Content, Footer } = Layout;
+const [currentUser, setCurrentUser] = useState(undefined);
+const [loggedIn, setLoggedIn] = useState(false);
 
-    useEffect(() => {
-        const user = AuthService.getCurrentUser();
-        const logged = AuthService.isLoggedIn();
-        setLoggedIn(logged);
-        if (user) {
-            setCurrentUser(user);
-        }
-    }, []);
+useEffect(() => {
+const user = AuthService.getCurrentUser();
+const logged = AuthService.isLoggedIn();
+setLoggedIn(logged);
+if (user) {
+setCurrentUser(user);
+}
+}, []);
 
-    const logOut = () => {
-        AuthService.logout();
-        setCurrentUser(undefined);
-        setLoggedIn(AuthService.isLoggedIn());
-    };
+const logOut = () => {
+AuthService.logout();
+setCurrentUser(undefined);
+setLoggedIn(AuthService.isLoggedIn());
+};
 
-    return (
-        <Router>
-            <Layout className="layout">
-                <Header>
-                    <div className="logo" />
-                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                        
-                        <Menu.Item key="1">
-                            <Link to={"/"} className="nav-link">
-                                Home
-                            </Link>
-                        </Menu.Item>
+return (
+<Router>
+    <Layout className="layout">
+        <Header>
+            <div className="logo" />
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
 
-                        <Menu.Item key="2">
-                            {!loggedIn ?
-                                <Link to={"/signup"} className="nav-link">
-                                    Sign up
-                            </Link>
-                                :
-                                <></>
-                            }
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            {!loggedIn ?
-                                <Link to={"/login"} className="nav-link">
-                                    Login
-                                </Link>
-                                :
-                                <Link to={"/logout"} className="nav-link" onClick={logOut}>
-                                    LogOut
-                            </Link>
-                            }
-                        </Menu.Item>
-                        <Menu.Item key="4">
-                            <Link to={"/department"} className="nav-link">
-                                Departamento
-                            </Link>
-                        </Menu.Item>
-                    </Menu>
-                </Header>
-                <Content style={{ padding: '0 50px' }}>
-                    <Breadcrumb style={{ margin: '16px 0' }}>
-                        <Breadcrumb.Item>Home</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <div className="site-layout-content">
-                        <Switch>
-                            <Route exact path={["/", "/home"]} component={Home} />
-                            <Route exact path="/login" component={Login} />
-                            <Route exact path="/timesheet" component={TimeSheet} />
-                            <Route exact path="/signup" component={Signup} />
-                            <Route exact path="/department" component={Department} />
-                        </Switch>
-                    </div>
-                </Content>
-                <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-            </Layout>
-        </Router>
-    );
+                <Menu.Item key="1">
+                    <Link to={"/"} className="nav-link">
+                    Home
+                    </Link>
+                </Menu.Item>
+
+                {!loggedIn ?
+                <>
+                    <Menu.Item key="2">
+                        <Link to={"/signup"} className="nav-link">
+                        Sign up
+                        </Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="3">
+                        <Link to={"/login"} className="nav-link">
+                        Login
+                        </Link>
+                    </Menu.Item>
+                </> :
+
+                <Menu.Item key="2">
+                    <Link to={"/logout"} className="nav-link" onClick={logOut}>
+                    LogOut
+                    </Link>
+                </Menu.Item>
+                }
+
+                
+                <Menu.Item key="4">
+                    <Link to={"/department"} className="nav-link">
+                    Departamento
+                    </Link>
+                </Menu.Item>
+            </Menu>
+        </Header>
+        <Content style={{ padding: '0 50px' }}>
+            <Breadcrumb style={{ margin: '16px 0' }}>
+                <Breadcrumb.Item>Home</Breadcrumb.Item>
+            </Breadcrumb>
+            <div className="site-layout-content">
+                <Switch>
+                    <Route exact path={["/", "/home" ]} component={Home} />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/timesheet" component={TimeSheet} />
+                    <Route exact path="/signup" component={Signup} />
+                    <Route exact path="/department" component={Department} />
+                </Switch>
+            </div>
+        </Content>
+        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+    </Layout>
+</Router>
+);
 }
 
 export default App;
