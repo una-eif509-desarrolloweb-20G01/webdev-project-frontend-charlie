@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Table, Form, Input, Button, Popconfirm } from "antd";
-import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons';
 import DepartamentService from "../../services/deparment.service";
 import './Department.css';
 const initialDepartmentListState = [{ id: 0, nombre: "d" }];
@@ -69,15 +68,16 @@ const Departament = (props) => {
   const handleInputChange = (event) => {
     inputName = event.target.value;
   };
-  const test = (id) => {
-    console.log(id);
-  };
 
   /** General Methods **/
 
   const saveDepartmentMethod = () => {
-    let data = { 'nombre': inputName }
-    DepartamentService.create(data)
+    if (inputName.trim() === "") {
+      alert("El nombre esta vacio o solo tiene espacios en blanco")
+      setError(true)
+    } else {
+      let data = { 'nombre': inputName }
+      DepartamentService.create(data)
       .then((response) => {
         console.log(response.data);
         setSaved(response.data);
@@ -92,6 +92,7 @@ const Departament = (props) => {
           window.location.reload();
         }
       });
+    }
   };
   const deleteDepartmentMethod = (id) => {
     console.log(id);
