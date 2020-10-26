@@ -40,17 +40,17 @@ class Signup extends React.Component {
                 "department": {
                     "id": 1
                 },
-                "createDate": "2020-08-31T00:23:52.000+00:00",
+                //"createDate": "2020-08-31T00:23:52.000+00:00",
                 "enabled": true,
                 "tokenExpired": false,
                 "roleList": []
             },
             departments: [],
-            roles: [],
+            //roles: [],
             error: false
         }
         this.getAllDeparments()
-        this.getAllRoles()
+        //this.getAllRoles()
     }
 
     getAllDeparments() {
@@ -62,7 +62,7 @@ class Signup extends React.Component {
         })
 
     }
-    getAllRoles() {
+    /*getAllRoles() {
         RoleService.getAll().then(data => {
             var array = []
             array.push(...data.data);
@@ -70,7 +70,7 @@ class Signup extends React.Component {
             console.log(this.state.roles)
         })
 
-    }
+    }*/
     listDepartmentOptions(data) {
         var array = []
 
@@ -80,7 +80,8 @@ class Signup extends React.Component {
 
         return array;
     }
-    listRolesOptions(data) {
+
+    /*listRolesOptions(data) {
         var array = []
 
         data.forEach(element => {
@@ -88,7 +89,7 @@ class Signup extends React.Component {
         });
 
         return array;
-    }
+    }*/
     render() {
         /** Service methods **/
         const signUpMethod = () => {
@@ -231,26 +232,7 @@ class Signup extends React.Component {
                         </Select>
                     </Form.Item>
 
-                    <Form.Item
-                        name="role"
-                        label="Roles"
-                        rules={[
-                            {
-                                required: true,
-                            },
-                        ]}
-                    >
-                        <Select
-                            mode="multiple"
-                            allowClear
-                            style={{ width: '100%' }}
-                            placeholder="Please select the roles"
-                            onChange={handleMultiSelectChange}
-                        >
-                            {this.listRolesOptions(this.state.roles)}
-                        </Select>
-                    </Form.Item>
-
+                
                     <Form.Item {...tailLayout}>
                         <Button type="primary" htmlType="submit" id="submit-btn">
                             Submit
