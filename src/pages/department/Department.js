@@ -54,12 +54,18 @@ const Departament = (props) => {
       render: (Department) => Department.nombre,
     },
     {
-      title: 'Action',
+      title: 'Delete',
       dataIndex: (Department) => Department.id,
       render: (Department, record) =>
         <Popconfirm title="Sure to delete?" onConfirm={() => deleteDepartmentMethod(record.id)}>
           <a>Delete</a>
         </Popconfirm>
+    },
+    {
+      title: 'Update',
+      dataIndex: (Department) => Department.id,
+      render: (Department, record) =>
+          <a onClick= {() => updateDepartmentMethod(record.id)}>Update</a>
     },
   ];
 
@@ -111,6 +117,30 @@ const Departament = (props) => {
         }
       });
   };
+
+  const updateDepartmentMethod = (id) => {
+    if (inputName.trim() === "") {
+      alert("El nombre esta vacio o solo tiene espacios en blanco")
+      setError(true)
+    } else {
+      let data = { 'id':id , 'nombre': inputName }
+      DepartamentService.update(data)
+      .then((response) => {
+        console.log(response.data);
+        setSaved(response.data);
+        getAllDepartmentsMethod();
+        onReset();
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(err);
+        if (err.response.status === 401) {
+          props.history.push("/login");
+          window.location.reload();
+        }
+      });
+    }
+  }
 
   const onReset = () => {
     form.resetFields();
