@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import TimeSheet from "./pages/TimeSheets";
 import Signup from "./pages/signup/SignUp";
 import Department from "./pages/department/Department";
+import TimeSheetDetails from "./pages/TimeSheets/TimeSheetDetails";
 
 function App() {
 const { Header, Content, Footer } = Layout;
@@ -81,6 +82,11 @@ return (
                         LogOut
                         </Link>
                     </Menu.Item>
+                    <Menu.Item key="4">
+                        <Link to={"/timeSheetDetails"} className="nav-link">
+                        TimeSheetDetails
+                        </Link>
+                    </Menu.Item>
                 </Menu>
 
             }
@@ -97,6 +103,7 @@ return (
                     <Route exact path="/timesheet" component={TimeSheet} />
                     <Route exact path="/signup" component={Signup} />
                     <Route exact path="/department" component={Department} />
+                    <Route exact path="/timeSheetDetails" component={TimeSheetDetails} />
                 </Switch>
             </div>
         </Content>
