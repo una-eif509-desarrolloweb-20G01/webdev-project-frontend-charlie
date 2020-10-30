@@ -7,7 +7,7 @@ import './App.css';
 import AuthService from "./services/auth.service";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import TimeSheet from "./pages/TimeSheets";
+import TimeSheet from "./pages/TimeSheets/TimeSheet";
 import Signup from "./pages/signup/SignUp";
 import Department from "./pages/department/Department";
 import TimeSheetDetails from "./pages/TimeSheets/TimeSheetDetails";
@@ -76,15 +76,14 @@ return (
                         Departamento
                         </Link>
                     </Menu.Item>
-
                     <Menu.Item key="3">
-                        <Link to={"/logout"} className="nav-link" onClick={logOut}>
-                        LogOut
+                        <Link to={"/timeSheet"} className="nav-link">
+                        Time Sheet
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="4">
-                        <Link to={"/timeSheetDetails"} className="nav-link">
-                        TimeSheetDetails
+                        <Link to={"/logout"} className="nav-link" onClick={logOut}>
+                        LogOut
                         </Link>
                     </Menu.Item>
                 </Menu>
@@ -103,7 +102,7 @@ return (
                     <Route exact path="/timesheet" component={TimeSheet} />
                     <Route exact path="/signup" component={Signup} />
                     <Route exact path="/department" component={Department} />
-                    <Route exact path="/timeSheetDetails" component={TimeSheetDetails} />
+                    <Route exact path="/timeSheetDetails/:id" component={TimeSheetDetails} />
                 </Switch>
             </div>
         </Content>

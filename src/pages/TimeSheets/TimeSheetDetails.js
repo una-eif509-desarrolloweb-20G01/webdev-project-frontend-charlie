@@ -15,7 +15,7 @@ const TimeSheetDetails = (props) => {
 
     useEffect(() => {
       // TODO: agregar el id que viene de la lista de timesheets
-        getTimeSheetDetailsMethod(1);
+        getTimeSheetDetailsMethod(props.match.params.id);
     }, []);
 
     /** Service Methods */
