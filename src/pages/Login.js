@@ -58,10 +58,6 @@ const Login = (props) => {
         loginMethod();
     };
 
-    const onReset = () => {
-        form.resetFields();
-    };
-
     return (
         <div>
             <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>

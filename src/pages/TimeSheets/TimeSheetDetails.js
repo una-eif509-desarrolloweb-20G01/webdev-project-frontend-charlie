@@ -1,7 +1,7 @@
 import React,  { useState, useEffect } from "react";
 import { Button, Popconfirm } from "antd";
 import TimeSheetService from "../../services/timesheet.service";
-import DepartamentService from "../../services/deparment.service";
+import DepartamentService from "../../services/department.service";
 
 const initialTimeSheetDetailsState = [{ id: 0, name: "d",  "timeRecordList": []}];
 const initialDepartmentListState = {"id":0,"nombre":"Test"};

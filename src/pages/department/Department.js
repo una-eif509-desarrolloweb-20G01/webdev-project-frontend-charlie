@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Table, Form, Input, Button, Popconfirm } from "antd";
-import DepartamentService from "../../services/deparment.service";
+import DepartamentService from "../../services/department.service";
 import './Department.css';
 const initialDepartmentListState = [{ id: 0, nombre: "d" }];
 
@@ -65,7 +65,7 @@ const Departament = (props) => {
       title: 'Update',
       dataIndex: (Department) => Department.id,
       render: (Department, record) =>
-          <a onClick= {() => updateDepartmentMethod(record.id)}>Update</a>
+        <a onClick={() => updateDepartmentMethod(record.id)}>Update</a>
     },
   ];
 
@@ -84,20 +84,20 @@ const Departament = (props) => {
     } else {
       let data = { 'nombre': inputName }
       DepartamentService.create(data)
-      .then((response) => {
-        console.log(response.data);
-        setSaved(response.data);
-        getAllDepartmentsMethod();
-        onReset();
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(err);
-        if (err.response.status === 401) {
-          props.history.push("/login");
-          window.location.reload();
-        }
-      });
+        .then((response) => {
+          console.log(response.data);
+          setSaved(response.data);
+          getAllDepartmentsMethod();
+          onReset();
+        })
+        .catch((err) => {
+          console.log(err);
+          setError(err);
+          if (err.response.status === 401) {
+            props.history.push("/login");
+            window.location.reload();
+          }
+        });
     }
   };
   const deleteDepartmentMethod = (id) => {
@@ -123,22 +123,22 @@ const Departament = (props) => {
       alert("El nombre esta vacio o solo tiene espacios en blanco")
       setError(true)
     } else {
-      let data = { 'id':id , 'nombre': inputName }
+      let data = { 'id': id, 'nombre': inputName }
       DepartamentService.update(data)
-      .then((response) => {
-        console.log(response.data);
-        setSaved(response.data);
-        getAllDepartmentsMethod();
-        onReset();
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(err);
-        if (err.response.status === 401) {
-          props.history.push("/login");
-          window.location.reload();
-        }
-      });
+        .then((response) => {
+          console.log(response.data);
+          setSaved(response.data);
+          getAllDepartmentsMethod();
+          onReset();
+        })
+        .catch((err) => {
+          console.log(err);
+          setError(err);
+          if (err.response.status === 401) {
+            props.history.push("/login");
+            window.location.reload();
+          }
+        });
     }
   }
 
@@ -164,7 +164,7 @@ const Departament = (props) => {
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={saveDepartmentMethod}>
+          <Button type="primary" onClick={saveDepartmentMethod} id="save-btn">
             Save
           </Button>
           <Button type="primary" onClick={onReset} danger>

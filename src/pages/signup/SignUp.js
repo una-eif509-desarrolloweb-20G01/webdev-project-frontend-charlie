@@ -2,8 +2,7 @@ import React from "react";
 import { Form, Alert, Input, Button, Select } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons';
 import UserService from "../../services/user.service";
-import DepartmentService from "../../services/deparment.service";
-import RoleService from "../../services/role.service";
+import DepartmentService from "../../services/department.service";
 import './SignUp.css';
 const { Option } = Select;
 const layout = {
@@ -23,8 +22,6 @@ const tailLayout = {
         span: 0,
     },
 };
-
-const roles = [];
 class Signup extends React.Component {
     formRef = React.createRef();
     constructor(props) {
@@ -46,11 +43,9 @@ class Signup extends React.Component {
                 "roleList": []
             },
             departments: [],
-            //roles: [],
             error: false
         }
         this.getAllDeparments()
-        //this.getAllRoles()
     }
 
     getAllDeparments() {
@@ -62,15 +57,6 @@ class Signup extends React.Component {
         })
 
     }
-    /*getAllRoles() {
-        RoleService.getAll().then(data => {
-            var array = []
-            array.push(...data.data);
-            this.setState({ roles: array })
-            console.log(this.state.roles)
-        })
-
-    }*/
     listDepartmentOptions(data) {
         var array = []
 
@@ -81,15 +67,6 @@ class Signup extends React.Component {
         return array;
     }
 
-    /*listRolesOptions(data) {
-        var array = []
-
-        data.forEach(element => {
-            array.push(<Option key={element.idRole}>{element.name}</Option>)
-        });
-
-        return array;
-    }*/
     render() {
         /** Service methods **/
         const signUpMethod = () => {
@@ -126,13 +103,7 @@ class Signup extends React.Component {
         const onDepartmentChange = (value) => {
             this.setState({ department: { id: value } })
         };
-        const handleMultiSelectChange = (value) => {
-            let list = [];
-            for (const val of value) {
-                list.push({ idRole: val })
-            }
-            this.state.user.roleList = list
-        }
+        
 
         return (
             <div>
