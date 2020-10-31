@@ -1,22 +1,25 @@
-import React, {useState} from "react";
-import {Form, Input, Button, Alert} from 'antd';
-import {EyeInvisibleOutlined, EyeTwoTone, UserOutlined} from '@ant-design/icons';
+import React, { useState } from "react";
+import { Form, Input, Button, Alert, Row, Card } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons';
 
 import AuthService from "../services/auth.service";
 
 const layout = {
     labelCol: {
-        span: 2,
+        span: 5
     },
     wrapperCol: {
-        span: 3,
-    },
+        span: 20
+    }
 };
+
 const tailLayout = {
-    wrapperCol: {
-        offset: 2,
-        span: 8,
+    labelCol: {
+        span: 5
     },
+    wrapperCol: {
+        offset: 5
+    }
 };
 
 const Login = (props) => {
@@ -47,8 +50,8 @@ const Login = (props) => {
     /** Handle actions in the Form **/
 
     const handleInputChange = event => {
-        let {name, value} = event.target;
-        setLogin({...login, [name]: value});
+        let { name, value } = event.target;
+        setLogin({ ...login, [name]: value });
     };
 
     /** General Methods **/
@@ -59,50 +62,54 @@ const Login = (props) => {
     };
 
     return (
-        <div>
-            <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-                <Form.Item
-                    name="username"
-                    label="User Name"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                >
-                    <Input
-                        name="username"
-                        prefix={<UserOutlined className="site-form-item-icon"/>}
-                        onChange={handleInputChange}
-                        placeholder="User Name"
-                    />
-                </Form.Item>
-                <Form.Item
-                    name="password"
-                    label="Password"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                >
-                    <Input.Password
-                        name="password"
-                        onChange={handleInputChange}
-                        placeholder="your password"
-                        iconRender={visible => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
-                    />
-                </Form.Item>
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Login
+        <Row type="flex" justify="center" align="middle">
+            <Card title="Login" style={{ width: "100%", maxWidth: 500, textAlign: "center", padding: "0px 0px" }}>
+                <div>
+                    <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+                        <Form.Item
+                            name="username"
+                            label="User Name"
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                        >
+                            <Input
+                                name="username"
+                                prefix={<UserOutlined className="site-form-item-icon" />}
+                                onChange={handleInputChange}
+                                placeholder="User Name"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="password"
+                            label="Password"
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                        >
+                            <Input.Password
+                                name="password"
+                                onChange={handleInputChange}
+                                placeholder="your password"
+                                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                            />
+                        </Form.Item>
+                        <Form.Item {...tailLayout}>
+                            <Button type="primary" htmlType="submit">
+                                Login
                     </Button>
-                </Form.Item>
-            </Form>
-            {error ? (
-                <Alert message="Error in the system. Try again later." type="error" showIcon closable/>
-            ) : null}
-        </div>
+                        </Form.Item>
+                    </Form>
+                    {error ? (
+                        <Alert message="Error in the system. Try again later." type="error" showIcon closable />
+                    ) : null}
+                </div>
+            </Card>
+        </Row>
     )
 };
 

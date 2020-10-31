@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+    ClockCircleFilled,
+    LogoutOutlined,
+    HomeFilled,
+    CopyFilled,
+    LoginOutlined,
+    EditFilled
+} from '@ant-design/icons';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import 'antd/dist/antd.css';
 import './App.css';
@@ -16,6 +24,7 @@ import Hours from "./pages/hours/Hours";
 function App() {
     const { Header, Content, Footer } = Layout;
     const [currentUser, setCurrentUser] = useState(undefined);
+    const [currentPage, setCurrentPage] = useState(undefined);
     const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
@@ -32,7 +41,10 @@ function App() {
         setCurrentUser(undefined);
         setLoggedIn(AuthService.isLoggedIn());
     };
-
+    const handleClick = e => {
+        console.log('click ', e);
+        setCurrentPage(e.key);
+    };
     return (
         <Router>
             <Layout className="layout">
@@ -41,21 +53,21 @@ function App() {
 
                     {!loggedIn ?
 
-                        < Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+                        < Menu theme="dark" mode="horizontal" onClick={handleClick} selectedKeys={[currentPage]}>
 
-                            <Menu.Item key="1">
+                            <Menu.Item key="Home" icon={<HomeFilled />}>
                                 <Link to={"/"} className="nav-link">
                                     Home
                         </Link>
                             </Menu.Item>
 
-                            <Menu.Item key="2">
+                            <Menu.Item key="Sign Up" icon={<EditFilled />}>
                                 <Link to={"/signup"} className="nav-link">
                                     Sign up
                         </Link>
                             </Menu.Item>
 
-                            <Menu.Item key="3">
+                            <Menu.Item key="Login" icon={<LoginOutlined />}>
                                 <Link to={"/login"} className="nav-link">
                                     Login
                         </Link>
@@ -64,30 +76,30 @@ function App() {
 
                         :
 
-                        < Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+                        < Menu theme="dark" mode="horizontal" onClick={handleClick} selectedKeys={[currentPage]}>
 
-                            <Menu.Item key="1">
+                            <Menu.Item key="Home" icon={<HomeFilled />}>
                                 <Link to={"/"} className="nav-link">
                                     Home
                         </Link>
                             </Menu.Item>
 
-                            <Menu.Item key="2">
+                            <Menu.Item key="Department">
                                 <Link to={"/department"} className="nav-link">
-                                    Departamento
+                                    Department
                         </Link>
                             </Menu.Item>
-                            <Menu.Item key="3">
+                            <Menu.Item key="Time Sheet" icon={<CopyFilled />}>
                                 <Link to={"/timeSheet"} className="nav-link">
                                     Time Sheet
                         </Link>
                             </Menu.Item>
-                            <Menu.Item key="4">
+                            <Menu.Item key="Hours" icon={<ClockCircleFilled />}>
                                 <Link to={"/hours"} className="nav-link">
                                     Hours
                         </Link>
                             </Menu.Item>
-                            <Menu.Item key="5">
+                            <Menu.Item key="Logout" icon={<LogoutOutlined />}>
                                 <Link to={"/logout"} className="nav-link" onClick={logOut}>
                                     Log out
                         </Link>
@@ -99,7 +111,7 @@ function App() {
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
                     <Breadcrumb style={{ margin: '16px 0' }}>
-                        <Breadcrumb.Item>Home</Breadcrumb.Item>
+                        <Breadcrumb.Item>{currentPage}</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="site-layout-content">
                         <Switch>

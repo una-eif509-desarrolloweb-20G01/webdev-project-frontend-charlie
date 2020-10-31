@@ -7,20 +7,20 @@ import './SignUp.css';
 const { Option } = Select;
 const layout = {
     labelCol: {
-        offset: 0,
-        span: 24
+        span: 5
     },
     wrapperCol: {
-        offset: 0,
-        span: 3
-    },
+        span: 20
+    }
 };
 
 const tailLayout = {
-    wrapperCol: {
-        offset: 0,
-        span: 0,
+    labelCol: {
+        span: 5
     },
+    wrapperCol: {
+        offset: 5
+    }
 };
 class Signup extends React.Component {
     formRef = React.createRef();
@@ -106,7 +106,7 @@ class Signup extends React.Component {
         
 
         return (
-            <div>
+            <div style={{ width: "100%", maxWidth: 500 }}>
                 <Form {...layout} ref={this.formRef} name="control-hooks" onFinish={onFinish}>
                     <Form.Item
                         name="firstName"
