@@ -41,9 +41,11 @@ const TimeSheet = (props) => {
   const [form] = Form.useForm();
   const [timeSheetList, setTimeSheetList] = useState(initialPriorityListState);
   const [error, setError] = useState(false);
-  const [validTimeSheetName, setTimeSheetName] = useState(true);
+  const [validTimeSheetName, setValidTimeSheetName] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [state, setState] = useState({ "visible": false });
-  let timeSheetName = "";
+  const [inputName, setInputName] = useState("");
+
   /**
    * Modal functions
   */
@@ -53,8 +55,14 @@ const TimeSheet = (props) => {
     });
   };
 
+  const modalToInitialState = () => {
+    handleOk();
+    setLoading(false);
+    setValidTimeSheetName(true);
+  };
+
+
   const handleOk = e => {
-    console.log(e);
     setState({
       visible: false,
     });
@@ -77,19 +85,29 @@ const TimeSheet = (props) => {
    * Create Time Sheets functions
    * *****************************
   */
-
   const handleInputChange = (event) => {
-    timeSheetName = event.target.value;
-    timeSheetName.trim().length>5 ? setTimeSheetName(false):setTimeSheetName(true);
+    setInputName(event.target.value);
+    let size = inputName.trim().length;
+
+    if (size > 6) {
+      setValidTimeSheetName(true);
+    }
+    else {
+      setValidTimeSheetName(false);
+    }
   };
 
   const createTimesheet = () => {
-    TimeSheetService.getAll()
+    setLoading(true);
+    let data = { 'name': inputName };
+    TimeSheetService.create(data)
       .then(response => {
-        sumTimeSheetHours(response);
+        setInputName("");
+        modalToInitialState();
       })
       .catch(err => {
-        console.log(err);
+        setInputName("");
+        modalToInitialState();
         setError(err)
         if (err.response.status === 401) {
           props.history.push("/login");
@@ -182,24 +200,24 @@ const TimeSheet = (props) => {
           <Button onClick={showModal} type="primary" shape="circle" icon={<PlusOutlined />} />
         </Tooltip>
 
-        <Modal title="Create New Time Sheet" visible={state.visible} onOk={handleOk} onCancel={handleCancel}
+        <Modal title="Create New Time Sheet" visible={state.visible} onCancel={handleCancel}
           footer={[
             <Button danger key="back" onClick={handleCancel}>
               Cancel
             </Button>,
-            <Button key="submit" type="primary" disabled={validTimeSheetName} loading={false} onClick={handleOk}>
+            <Button key="submit" type="primary" disabled={validTimeSheetName} loading={loading} onClick={createTimesheet}>
               Submit
             </Button>,
           ]}>
 
           <Form {...layout} form={form} name="control-hooks">
             <Form.Item
-              name="name"
+              name="Name"
               label="Time Sheet Name"
               rules={[{ required: true }]}
             >
               <Input
-                name="name"
+                name="Name"
                 onChange={handleInputChange}
                 placeholder="January"
                 rules={[

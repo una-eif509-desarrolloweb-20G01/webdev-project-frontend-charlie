@@ -10,6 +10,7 @@ const get = id => {
 };
 
 const create = data => {
+    console.log(data);
     return http.post("/timeSheets", data, { headers: authHeader() });
 };
 

@@ -100,6 +100,7 @@ const Departament = (props) => {
         });
     }
   };
+  
   const deleteDepartmentMethod = (id) => {
     console.log(id);
     DepartamentService.remove(id)
