@@ -70,7 +70,6 @@ const TimeSheetDetails = (props) => {
       TimeSheetService.remove(id)
         .then((response) => {
           props.history.push("/timeSheet");
-          window.location.reload();
         })
         .catch((err) => {
           console.log(err);

@@ -12,11 +12,6 @@ import { EyeOutlined, PlusOutlined } from '@ant-design/icons';
 import TimeSheetService from "../../services/timesheet.service";
 
 const initialPriorityListState = [
-  {
-    "id": 0,
-    "name": "",
-    "hours": 0
-  }
 ];
 /**
  * Create new time Sheet layout
@@ -41,7 +36,7 @@ const TimeSheet = (props) => {
   const [form] = Form.useForm();
   const [timeSheetList, setTimeSheetList] = useState(initialPriorityListState);
   const [error, setError] = useState(false);
-  const [validTimeSheetName, setValidTimeSheetName] = useState(true);
+  const [disalbed, setDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({ "visible": false });
   const [inputName, setInputName] = useState("");
@@ -58,7 +53,7 @@ const TimeSheet = (props) => {
   const modalToInitialState = () => {
     handleOk();
     setLoading(false);
-    setValidTimeSheetName(true);
+    setDisabled(true);
   };
 
 
@@ -77,8 +72,7 @@ const TimeSheet = (props) => {
 
   useEffect(() => {
     getAllThimeSheetsMethod();
-  });
-
+  },[]);
 
   /**
    * *****************************
@@ -87,13 +81,12 @@ const TimeSheet = (props) => {
   */
   const handleInputChange = (event) => {
     setInputName(event.target.value);
-    let size = inputName.trim().length;
-
-    if (size > 6) {
-      setValidTimeSheetName(true);
+    let size = event.target.value.trim().length;
+    if (size > 4) {
+      setDisabled(false);
     }
     else {
-      setValidTimeSheetName(false);
+      setDisabled(true);
     }
   };
 
@@ -104,6 +97,7 @@ const TimeSheet = (props) => {
       .then(response => {
         setInputName("");
         modalToInitialState();
+        getAllThimeSheetsMethod();
       })
       .catch(err => {
         setInputName("");
@@ -205,7 +199,7 @@ const TimeSheet = (props) => {
             <Button danger key="back" onClick={handleCancel}>
               Cancel
             </Button>,
-            <Button key="submit" type="primary" disabled={validTimeSheetName} loading={loading} onClick={createTimesheet}>
+            <Button key="submit" type="primary" disabled={disalbed} loading={loading} onClick={createTimesheet}>
               Submit
             </Button>,
           ]}>
