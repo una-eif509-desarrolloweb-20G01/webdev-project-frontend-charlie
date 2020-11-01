@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Alert, Table} from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
+/**
+ * Components
+ */
+import { Alert, Table, Tooltip, Button, Divider, Modal } from 'antd';
+/**
+ * Icons
+ */
+import { EyeOutlined, PlusOutlined } from '@ant-design/icons';
+
 
 import TimeSheetService from "../../services/timesheet.service";
 
@@ -15,6 +22,30 @@ const initialPriorityListState = [
 const TimeSheet = (props) => {
   const [timeSheetList, setTimeSheetList] = useState(initialPriorityListState);
   const [error, setError] = useState(false);
+  const [state, setState] = useState({ "visible": false });
+
+
+  const showModal = () => {
+    setState({
+      visible: true,
+    });
+  };
+
+  const handleOk = e => {
+    console.log(e);
+    setState({
+      visible: false,
+    });
+  };
+
+  const handleCancel = e => {
+    console.log(e);
+    setState({
+      visible: false,
+    });
+  };
+
+
 
   useEffect(() => {
     getAllThimeSheetsMethod();
@@ -86,20 +117,34 @@ const TimeSheet = (props) => {
       title: 'Details',
       dataIndex: (timesheet) => timesheet.id,
       render: (timesheet, element) =>
-      <EyeOutlined onClick={() => timeSheetDetails(element.id)} />
-      
+        <EyeOutlined onClick={() => timeSheetDetails(element.id)} />
+
     }
   ];
 
+
   return (
     <div>
+      <h1>Time Sheets</h1>
+      <>
+        <Tooltip title="Create Time Sheet">
+          <Button onClick={showModal} type="primary" shape="circle" icon={<PlusOutlined />} />
+        </Tooltip>
 
-      <h1>Time Sheet</h1>
+        <Modal title="Basic Modal" visible={state.visible} onOk={handleOk} onCancel={handleCancel}
+          okButtonProps={{ disabled: false }} cancelButtonProps={{ disabled: false }}>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
+      </>
+      <Divider />
       <Table rowKey={timeSheetList => timeSheetList.id} columns={columns} dataSource={timeSheetList} />
       {error ? (
         <Alert message="Error in the system. Try again later." type="error" showIcon closable />
       ) : null}
     </div>
+
   )
 };
 
