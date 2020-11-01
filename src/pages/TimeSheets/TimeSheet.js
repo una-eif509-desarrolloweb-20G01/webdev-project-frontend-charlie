@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 /**
  * Components
  */
-import { Alert, Table, Tooltip, Button, Divider, Modal } from 'antd';
+import { Alert, Table, Tooltip, Button, Divider, Modal, Form, Input } from 'antd';
 /**
  * Icons
  */
@@ -18,13 +18,35 @@ const initialPriorityListState = [
     "hours": 0
   }
 ];
+/**
+ * Create new time Sheet layout
+ */
+const layout = {
+  labelCol: {
+    span: 0,
+  },
+  wrapperCol: {
+    span: 4,
+  },
+};
+
+/**
+ * ************************************************************************
+ *                            Time Sheets component
+ * ************************************************************************
+ * @param {*} props 
+ */
 
 const TimeSheet = (props) => {
+  const [form] = Form.useForm();
   const [timeSheetList, setTimeSheetList] = useState(initialPriorityListState);
   const [error, setError] = useState(false);
+  const [validTimeSheetName, setTimeSheetName] = useState(true);
   const [state, setState] = useState({ "visible": false });
-
-
+  let timeSheetName = "";
+  /**
+   * Modal functions
+  */
   const showModal = () => {
     setState({
       visible: true,
@@ -45,13 +67,42 @@ const TimeSheet = (props) => {
     });
   };
 
-
-
   useEffect(() => {
     getAllThimeSheetsMethod();
   });
 
-  /** Service methods **/
+
+  /**
+   * *****************************
+   * Create Time Sheets functions
+   * *****************************
+  */
+
+  const handleInputChange = (event) => {
+    timeSheetName = event.target.value;
+    timeSheetName.trim().length>5 ? setTimeSheetName(false):setTimeSheetName(true);
+  };
+
+  const createTimesheet = () => {
+    TimeSheetService.getAll()
+      .then(response => {
+        sumTimeSheetHours(response);
+      })
+      .catch(err => {
+        console.log(err);
+        setError(err)
+        if (err.response.status === 401) {
+          props.history.push("/login");
+          window.location.reload();
+        }
+      });
+  }
+
+  /**
+   * *****************************
+   * List Time Sheets functions
+   * *****************************
+  */
   const getAllThimeSheetsMethod = () => {
     TimeSheetService.getAll()
       .then(response => {
@@ -131,11 +182,36 @@ const TimeSheet = (props) => {
           <Button onClick={showModal} type="primary" shape="circle" icon={<PlusOutlined />} />
         </Tooltip>
 
-        <Modal title="Basic Modal" visible={state.visible} onOk={handleOk} onCancel={handleCancel}
-          okButtonProps={{ disabled: false }} cancelButtonProps={{ disabled: false }}>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+        <Modal title="Create New Time Sheet" visible={state.visible} onOk={handleOk} onCancel={handleCancel}
+          footer={[
+            <Button danger key="back" onClick={handleCancel}>
+              Cancel
+            </Button>,
+            <Button key="submit" type="primary" disabled={validTimeSheetName} loading={false} onClick={handleOk}>
+              Submit
+            </Button>,
+          ]}>
+
+          <Form {...layout} form={form} name="control-hooks">
+            <Form.Item
+              name="name"
+              label="Time Sheet Name"
+              rules={[{ required: true }]}
+            >
+              <Input
+                name="name"
+                onChange={handleInputChange}
+                placeholder="January"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                style={{ width: 200, margin: '0 10px' }}
+              />
+            </Form.Item>
+
+          </Form>
         </Modal>
       </>
       <Divider />
