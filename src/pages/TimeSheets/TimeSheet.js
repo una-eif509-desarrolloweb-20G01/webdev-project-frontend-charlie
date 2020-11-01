@@ -52,6 +52,8 @@ const TimeSheet = (props) => {
 
   const modalToInitialState = () => {
     handleOk();
+    onReset();
+    setInputName("");
     setLoading(false);
     setDisabled(true);
   };
@@ -70,15 +72,10 @@ const TimeSheet = (props) => {
     });
   };
 
-  useEffect(() => {
-    getAllThimeSheetsMethod();
-  },[]);
+  const onReset = () => {
+    form.resetFields();
+  };
 
-  /**
-   * *****************************
-   * Create Time Sheets functions
-   * *****************************
-  */
   const handleInputChange = (event) => {
     setInputName(event.target.value);
     let size = event.target.value.trim().length;
@@ -90,17 +87,21 @@ const TimeSheet = (props) => {
     }
   };
 
+  /**
+   * *****************************
+   * Create Time Sheets functions
+   * *****************************
+  */
+ 
   const createTimesheet = () => {
     setLoading(true);
     let data = { 'name': inputName };
     TimeSheetService.create(data)
       .then(response => {
-        setInputName("");
         modalToInitialState();
         getAllThimeSheetsMethod();
       })
       .catch(err => {
-        setInputName("");
         modalToInitialState();
         setError(err)
         if (err.response.status === 401) {
@@ -115,6 +116,12 @@ const TimeSheet = (props) => {
    * List Time Sheets functions
    * *****************************
   */
+
+  useEffect(() => {
+    getAllThimeSheetsMethod();
+  }, []);
+
+
   const getAllThimeSheetsMethod = () => {
     TimeSheetService.getAll()
       .then(response => {
@@ -129,7 +136,6 @@ const TimeSheet = (props) => {
         }
       });
   }
-
 
   const timeSheetDetails = (id) => {
     props.history.push(`/timeSheetDetails/${id}`);
@@ -204,13 +210,14 @@ const TimeSheet = (props) => {
             </Button>,
           ]}>
 
-          <Form {...layout} form={form} name="control-hooks">
+          <Form {...layout} form={form} name="control-hooks" id="create-timesheet">
             <Form.Item
               name="Name"
               label="Time Sheet Name"
               rules={[{ required: true }]}
             >
               <Input
+                value={inputName}
                 name="Name"
                 onChange={handleInputChange}
                 placeholder="January"
