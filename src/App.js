@@ -20,6 +20,7 @@ import Signup from "./pages/signup/SignUp";
 import Department from "./pages/department/Department";
 import TimeSheetDetails from "./pages/TimeSheets/TimeSheetDetails";
 import Hours from "./pages/hours/Hours";
+import User from "./pages/user/User";
 
 function App() {
     const { Header, Content, Footer } = Layout;
@@ -122,6 +123,7 @@ function App() {
                             <Route exact path="/department" component={Department} />
                             <Route exact path="/hours" component={Hours} />
                             <Route exact path="/timeSheetDetails/:id" component={TimeSheetDetails} />
+                            <Route exact path="/users" component={User} />
                         </Switch>
                     </div>
                 </Content>
