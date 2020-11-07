@@ -2,24 +2,16 @@ import React, { useState, useEffect } from "react";
 /**
  * Components
  */
-import { Alert, Table, Divider,  Form,  } from 'antd';
+import { Alert, Table, Divider, Form, Input, Button, Checkbox, Select } from 'antd';
+import { } from 'antd';
 
 
 import UserService from "../../services/user.service";
+import DepartmentService from "../../services/department.service";
 
 const initialUserList = [
 ];
-/**
- * Create new time Sheet layout
- */
-const layout = {
-  labelCol: {
-    span: 0,
-  },
-  wrapperCol: {
-    span: 4,
-  },
-};
+
 
 /**
  * ************************************************************************
@@ -29,9 +21,24 @@ const layout = {
  */
 
 const User = (props) => {
-  const [form] = Form.useForm();
   const [userList, setUserList] = useState(initialUserList);
+  const [selectedDepartment, setSelectedDepartment] = useState(0);
   const [error, setError] = useState(false);
+  const [departments, setDepartments] = useState([]);
+  const { Option } = Select;
+
+  const onFinish = values => {
+    console.log('Success:', values);
+  };
+
+  const onFinishFailed = errorInfo => {
+    console.log('Failed:', errorInfo);
+  };
+
+  useEffect(() => {
+    getAllUsers();
+    getAllDeparments();
+  }, []);
 
 
   /**
@@ -39,11 +46,6 @@ const User = (props) => {
    * List Users
    * *****************************
   */
-
-  useEffect(() => {
-    getAllUsers();
-  }, []);
-
 
   const getAllUsers = () => {
     UserService.getAll()
@@ -60,6 +62,23 @@ const User = (props) => {
       });
   }
 
+  /**
+   * *****************************
+   * List Departments
+   * *****************************
+  */
+  const getAllDeparments = () => {
+    DepartmentService.getAll().then(response => {
+      setDepartments(response.data);
+    })
+  }
+
+  /**
+   * *****************************
+   * Table Columns and Layout
+   * *****************************
+  */
+
   const columns = [
     {
       title: 'User Name',
@@ -73,11 +92,38 @@ const User = (props) => {
     },
     {
       title: 'Active',
-      render: (user) => user.enabled? 'Yes':'No',
+      render: (user) => user.enabled ? 'Yes' : 'No',
       width: '20%',
     }
   ];
 
+  const layout = {
+    labelCol: { span: 3 },
+    wrapperCol: { span: 8 },
+  };
+  const tailLayout = {
+    wrapperCol: { offset: 3, span: 8 },
+  };
+
+  /**
+   * *****************************
+   *     Department selector
+   * *****************************
+  */
+
+  const listDepartmentOptions = (data) => {
+    var array = []
+
+    data.forEach(element => {
+      array.push(<Option key={element.id}>{element.nombre}</Option>)
+    });
+
+    return array;
+  }
+
+  const onDepartmentChange = (value) => {
+    setSelectedDepartment(value);
+  };
 
   return (
     <div>
@@ -85,7 +131,66 @@ const User = (props) => {
       <Divider />
       <Table rowKey={userList => userList.id} columns={columns} dataSource={userList} />
       <Divider />
-      
+      <>
+        <Form
+          {...layout}
+          name="basic"
+          initialValues={{ remember: false }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item
+            label="Name"
+            name="Name"
+            rules={[{ required: true, message: '' }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Username"
+            name="uname"
+            rules={[{ required: true, message: '' }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            {...tailLayout}
+            rules={[{ required: true, message: '' }]}
+            name="remember"
+            valuePropName="checked"
+          >
+            <Checkbox>Is Active</Checkbox>
+          </Form.Item>
+
+          <Form.Item
+            name="department"
+            label="Department"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              defaultValue={departments[0]}
+              placeholder="Select a department"
+              onChange={onDepartmentChange}
+              allowClear
+            >
+              {listDepartmentOptions(departments)}
+            </Select>
+          </Form.Item>
+
+
+          <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit">
+              Submit
+        </Button>
+          </Form.Item>
+        </Form>
+      </>
       {error ? (
         <Alert message="Error in the system. Try again later." type="error" showIcon closable />
       ) : null}
