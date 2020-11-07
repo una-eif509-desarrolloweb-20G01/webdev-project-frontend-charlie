@@ -6,7 +6,9 @@ import {
     HomeFilled,
     CopyFilled,
     LoginOutlined,
-    EditFilled
+    EditFilled,
+    SettingOutlined,
+    PartitionOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import 'antd/dist/antd.css';
@@ -23,6 +25,7 @@ import Hours from "./pages/hours/Hours";
 import User from "./pages/user/User";
 import TimeSheetManagement from "./pages/timesheet_managment/TimeSheetManagement";
 
+const { SubMenu } = Menu;
 function App() {
     const { Header, Content, Footer } = Layout;
     const [currentUser, setCurrentUser] = useState(undefined);
@@ -55,65 +58,65 @@ function App() {
 
                     {!loggedIn ?
 
-                        < Menu theme="dark" mode="horizontal" onClick={handleClick} selectedKeys={[currentPage]}>
+                        <Menu theme="dark" mode="horizontal" onClick={handleClick} selectedKeys={[currentPage]}>
 
                             <Menu.Item key="Home" icon={<HomeFilled />}>
                                 <Link to={"/"} className="nav-link">
                                     Home
-                        </Link>
+                                </Link>
                             </Menu.Item>
 
                             <Menu.Item key="Sign Up" icon={<EditFilled />}>
                                 <Link to={"/signup"} className="nav-link">
                                     Sign up
-                        </Link>
+                                </Link>
                             </Menu.Item>
 
                             <Menu.Item key="Login" icon={<LoginOutlined />}>
                                 <Link to={"/login"} className="nav-link">
                                     Login
-                        </Link>
+                                </Link>
                             </Menu.Item>
                         </Menu>
 
                         :
 
-                        < Menu theme="dark" mode="horizontal" onClick={handleClick} selectedKeys={[currentPage]}>
+                        <Menu theme="dark" mode="horizontal" onClick={handleClick} selectedKeys={[currentPage]}>
 
                             <Menu.Item key="Home" icon={<HomeFilled />}>
                                 <Link to={"/"} className="nav-link">
                                     Home
-                        </Link>
-                            </Menu.Item>
-
-                            <Menu.Item key="Department">
-                                <Link to={"/department"} className="nav-link">
-                                    Department
-                        </Link>
+                                </Link>
                             </Menu.Item>
                             <Menu.Item key="Time Sheet" icon={<CopyFilled />}>
                                 <Link to={"/timeSheet"} className="nav-link">
                                     Time Sheet
-                        </Link>
+                                </Link>
                             </Menu.Item>
-                            <Menu.Item key="Time Sheet Managment" icon={<CopyFilled />}>
-                                <Link to={"/timesheetManagement"} className="nav-link">
-                                    Time Sheet Management
-                        </Link>
-                            </Menu.Item>
-
                             <Menu.Item key="Hours" icon={<ClockCircleFilled />}>
                                 <Link to={"/hours"} className="nav-link">
                                     Hours
-                        </Link>
+                                </Link>
                             </Menu.Item>
+                            <SubMenu key="SubMenu" icon={<SettingOutlined />} title="Management">
+                                <Menu.Item key="Time Sheet Managment" icon={<CopyFilled />}>
+                                    <Link to={"/timesheetManagement"} className="nav-link">
+                                        Time Sheet Management
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item key="Department" icon={<PartitionOutlined />}>
+                                    <Link to={"/department"} className="nav-link">
+                                        Department
+                                    </Link>
+                                </Menu.Item>
+                            </SubMenu>
+                            
                             <Menu.Item key="Logout" icon={<LogoutOutlined />}>
                                 <Link to={"/logout"} className="nav-link" onClick={logOut}>
                                     Log out
-                        </Link>
+                                </Link>
                             </Menu.Item>
                         </Menu>
-
                     }
 
                 </Header>

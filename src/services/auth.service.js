@@ -18,10 +18,10 @@ const login = data => {
 
 const loadCurrentUser = username => {
     return http.get(`/users/username/${username}`, { headers: authHeader() })
-        .then((response) => {            
-                localStorage.setItem("user", JSON.stringify(response.data));
+        .then((response) => {
+            localStorage.setItem("user", JSON.stringify(response.data));
             return response.data;
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err);
         });
 };

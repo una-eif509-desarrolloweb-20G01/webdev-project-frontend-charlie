@@ -48,7 +48,7 @@ class TimeSheetManagement extends React.Component {
     }
 
     getCurrentUser = () => {
-        return JSON.parse(localStorage.getItem("user.data"));
+        return JSON.parse(localStorage.getItem("user"));
     };
     listTimeSheetsOptions(data) {
         var array = []
