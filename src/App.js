@@ -21,6 +21,7 @@ import Department from "./pages/department/Department";
 import TimeSheetDetails from "./pages/TimeSheets/TimeSheetDetails";
 import Hours from "./pages/hours/Hours";
 import User from "./pages/user/User";
+import TimeSheetManagement from "./pages/timesheet_managment/TimeSheetManagement";
 
 function App() {
     const { Header, Content, Footer } = Layout;
@@ -95,6 +96,12 @@ function App() {
                                     Time Sheet
                         </Link>
                             </Menu.Item>
+                            <Menu.Item key="Time Sheet Managment" icon={<CopyFilled />}>
+                                <Link to={"/timesheetManagement"} className="nav-link">
+                                    Time Sheet Management
+                        </Link>
+                            </Menu.Item>
+
                             <Menu.Item key="Hours" icon={<ClockCircleFilled />}>
                                 <Link to={"/hours"} className="nav-link">
                                     Hours
@@ -119,6 +126,7 @@ function App() {
                             <Route exact path={["/", "/home"]} component={Home} />
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/timesheet" component={TimeSheet} />
+                            <Route exact path="/timesheetManagement" component={TimeSheetManagement} />
                             <Route exact path="/signup" component={Signup} />
                             <Route exact path="/department" component={Department} />
                             <Route exact path="/hours" component={Hours} />
