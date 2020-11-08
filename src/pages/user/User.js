@@ -41,9 +41,6 @@ const defaultUser = {
 const User = (props) => {
   const [form] = Form.useForm();
   const [userList, setUserList] = useState(initialUserList);
-  const [departmentSelectIndex, setDepartmentSelectIndex] = useState(0);
-  const [currentUserDepartmentNaMe, setCurrentUserDepartmentNaMe] = useState("");
-  const [currentUserRoleNaMe, setCurrentUserRoleNaMe] = useState("");
   const [error, setError] = useState(false);
   const [departments, setDepartments] = useState([]);
   const [rolesList, setRolesList] = useState([]);
@@ -53,12 +50,17 @@ const User = (props) => {
     [
       {
         name: ['username'],
-        value: 'username'
+        value: ''
       },
       {
         name: ['firstName'],
-        value: 'firstName'
+        value: ''
+      },
+      {
+        name: ['lastname'],
+        value: ''
       }
+
     ]);
 
 
@@ -163,7 +165,7 @@ const User = (props) => {
 
   const layout = {
     labelCol: { span: 2 },
-    wrapperCol: { span: 4, offset: 1 },
+    wrapperCol: { span: 6, offset: 1 },
   };
   const tailLayout = {
     wrapperCol: { offset: 1, span: 8 },
@@ -203,14 +205,13 @@ const User = (props) => {
 
 
 
-  const onChange = e => {
-    console.log('checked = ', e.target.checked);
-    setState({
-      checked: e.target.checked,
-    });
-  };
 
   const tableRowSelected = user => {
+    updateFormFields(user);
+  };
+
+
+  const updateFormFields = (user) => {
 
     setFields([
       {
@@ -222,6 +223,10 @@ const User = (props) => {
         value: user.firstName
       },
       {
+        name: ['lastname'],
+        value: user.lastName
+      },
+      {
         name: ['department'],
         value: user.department.nombre
       },
@@ -230,22 +235,78 @@ const User = (props) => {
         value: user.roleList[0].name
       }
     ]);
+
     setState({ checked: user.enabled, disabled: false, });
     setCurrentUser(user)
-
   };
-
   const onDepartmentChange = (value) => {
-    console.log(value);
-    let index = parseInt(value, 10);
-    setDepartmentSelectIndex(index);
+    let user = currentUser;
+    user.department = departments[value > 0 ? value - 1 : value];
+    setCurrentUser(user);
   };
 
+  const onRoleChange = (value) => {
+    let user = currentUser;
+    user.roleList = [rolesList[value > 0 ? value - 1 : value]];
+    setCurrentUser(user);
+  };
+
+  const handleInputChange = event => {
+    let user = currentUser;
+    switch (event.target.id) {
+      case "basic_username": {
+        user.username = event.target.value;
+        setCurrentUser(user)
+        break;
+      }
+      case "basic_firstName": {
+        user.firstName = event.target.value;
+        setCurrentUser(user)
+        break;
+      }
+      case "basic_lastname": {
+        user.lastName = event.target.value;
+        setCurrentUser(user)
+        break;
+      }
+    }
+  };
+
+  const onChange = e => {
+    console.log('checked = ', e.target.checked);
+    setState({
+      checked: e.target.checked,
+    });
+    currentUser.enabled = e.target.checked;
+    setCurrentUser(currentUser);
+  };
+
+  /**
+   * *****************************
+   * Update User
+   * *****************************
+  */
+
+  const updateUser = () => {
+    //setLoading(true);
+    UserService.update(currentUser)
+      .then(response => {
+        setCurrentUser(defaultUser);
+        updateFormFields(defaultUser);
+        getAllUsers();
+      })
+      .catch(err => {
+        setError(err)
+        if (err.response.status === 401) {
+          props.history.push("/login");
+        }
+      });
+  }
 
   const label = `${state.checked ? 'Checked' : 'Unchecked'}-${state.disabled ? 'Disabled' : 'Enabled'}`;
   return (
     <div>
-      <h1>User Management </h1>
+      <h1>User Management {currentUser.username}..</h1>
       <Divider />
       <Table
         rowKey={userList => userList.id}
@@ -266,8 +327,8 @@ const User = (props) => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
-
           <Form.Item
+            onChange={handleInputChange}
             label="username"
             name="username"
             rules={[{ required: true, message: '' }]}
@@ -277,8 +338,20 @@ const User = (props) => {
           </Form.Item>
 
           <Form.Item
-            label="Name"
+            onChange={handleInputChange}
+            label="First Name"
             name="firstName"
+            rules={[{ required: true, message: '' }]}
+          >
+            <Input
+              required
+            />
+          </Form.Item>
+
+          <Form.Item
+            onChange={handleInputChange}
+            label="Last Name"
+            name="lastname"
             rules={[{ required: true, message: '' }]}
           >
             <Input
@@ -289,8 +362,8 @@ const User = (props) => {
 
 
           <Form.Item
+            onChange={handleInputChange}
             {...tailLayout}
-            rules={[{ required: true, message: '' }]}
             label="Enabled"
             name="enabled"
           >
@@ -331,7 +404,7 @@ const User = (props) => {
             ]}
           >
             <Select
-              onChange={onDepartmentChange}
+              onChange={onRoleChange}
               allowClear
             >
               {listRoleOptions(rolesList)}
@@ -339,9 +412,10 @@ const User = (props) => {
           </Form.Item>
 
           <Form.Item {...tailLayout}>
-            <Button id="s" type="primary" htmlType="submit">
+            <Button id="s" type="primary" htmlType="submit" disabled={false} loading={false} onClick={updateUser} >
               Save
            </Button>
+
             <Button type="danger" htmlType="submit">
               Cancel
            </Button>

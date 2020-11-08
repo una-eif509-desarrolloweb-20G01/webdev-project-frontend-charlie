@@ -19,7 +19,7 @@ const create = data => {
 };
 
 const update = (data) => {
-    return http.put(`/users/`, data, { headers: authHeader() });
+    return http.put(`/users`, data, { headers: authHeader() });
 };
 
 const remove = id => {
