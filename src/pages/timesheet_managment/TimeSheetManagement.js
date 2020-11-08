@@ -27,7 +27,13 @@ class TimeSheetManagement extends React.Component {
             table: {
                 loading: false
             },
-            currentTimeSheet: null
+            currentTimeSheet: null,
+            report: {
+                averageHours: 0,
+                totalHours: 0 ,
+                totalNonApproved: 0,
+                totalNonPaid: 0
+            }
         }
         this.getAlltimeSheets()
         this.getAllDeparments()
@@ -75,7 +81,14 @@ class TimeSheetManagement extends React.Component {
     sumTimeSheetHours = (timesheet) => {
         let array = []
         let sum = 0, paidSum = 0, approvedSum = 0;
-
+        let reportSums = {
+            averageHours: 0,
+            totalHours: 0,
+            totalNonApproved: 0,
+            totalNonPaid: 0,
+            totalRows: 0
+                
+        }
         const grouped = this.groupBy(timesheet.timeRecordList, record => record.user.username);
         grouped.forEach((entry) => {
             let currentEntryUser = entry.entries().next().value[1].user;
@@ -115,16 +128,28 @@ class TimeSheetManagement extends React.Component {
                 approvedSum += element.isApproved ? element.tuesdayHours : 0;
                 approvedSum += element.isApproved ? element.wednesdayHours : 0;
 
+                reportSums.totalRows++
 
             })
             timeSheet.totalHours = sum;
             timeSheet.approvedHours = approvedSum;
             timeSheet.paidHours = paidSum;
 
+            reportSums.totalHours += sum;
+            reportSums.averageHours += sum;
+            reportSums.totalNonApproved += sum - approvedSum;
+            reportSums.totalNonPaid += sum - paidSum;
             array.push(timeSheet);
 
         });
-
+        this.setState({
+            report: {
+                averageHours: reportSums.totalHours/reportSums.totalRows,
+                totalHours: reportSums.totalHours ,
+                totalNonApproved: reportSums.totalNonApproved,
+                totalNonPaid: reportSums.totalNonPaid
+            }
+        })
         this.setState({ hours: array }, () => {
 
         });
@@ -328,7 +353,17 @@ class TimeSheetManagement extends React.Component {
                     </Descriptions.Item>
                 </Descriptions>
                 <Divider orientation="left" plain>List of hours by user for this time sheet</Divider>
-                <Table loading={this.state.table.loading} rowKey={timeSheets => timeSheets.id} columns={columns} dataSource={this.state.hours} />
+                <Table loading={this.state.table.loading} rowKey={timeSheets => timeSheets.id} columns={columns} dataSource={this.state.hours}  footer={() => {
+                    return <div>
+                        <Descriptions layout="horizontal" bordered size="small" column={5}>
+                            <Descriptions.Item label="Average Hours">{this.state.report.averageHours}</Descriptions.Item>
+                            <Descriptions.Item label="Total Hours">{this.state.report.totalHours}</Descriptions.Item>
+                            <Descriptions.Item label="Total Non Approved">{this.state.report.totalNonApproved}</Descriptions.Item>
+                            <Descriptions.Item label="Total Non Paid">{this.state.report.totalNonPaid}</Descriptions.Item>
+                            <Descriptions.Item >  <Button type="primary" onClick={()=>{window.print();}} >Generate Report</Button></Descriptions.Item>
+                        </Descriptions>
+                    </div>
+                }}/>
 
                 <Modal
                     title={this.state.modal.modalTitle}
