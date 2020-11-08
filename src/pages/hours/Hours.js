@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Button, Slider, Select, Alert } from 'antd';
+import { Form, Button, Slider, Input, Select, Alert } from 'antd';
 import DepartmentService from "../../services/department.service";
 import TimeSheetService from "../../services/timesheet.service";
 import TimeRecordService from "../../services/timerecord.service";
@@ -39,7 +39,12 @@ class Hours extends React.Component {
                 saturdayHours: 0,
                 sundayHours: 0,
                 departmentId: null,
-                timesheetId: null
+                timesheetId: null,
+                isApproved: false,
+                isPaid: false,
+                user: {
+                    idUser: JSON.parse(localStorage.getItem("user")).idUser
+                }
             }
         }
         this.getAllDeparments()
@@ -51,7 +56,6 @@ class Hours extends React.Component {
             var array = []
             array.push(...data.data);
             this.setState({ departments: array })
-            console.log(this.state.departments)
         })
 
     }
@@ -60,7 +64,6 @@ class Hours extends React.Component {
             var array = []
             array.push(...data.data);
             this.setState({ timeSheets: array })
-            console.log(this.state.timeSheets)
         })
 
     }
@@ -88,22 +91,25 @@ class Hours extends React.Component {
         /** General Methods **/
 
         const onFinish = data => {
-            this.setState({ timeRecord: data })
-            console.log(this.state.timeRecord)
-            TimeRecordService.create(this.state.timeRecord)
-                .then(response => {
-                    this.setState({ timeRecord: response.data });
-                    this.formRef.current.resetFields();
-                    this.setState({ error: 0 });
-                })
-                .catch(err => {
-                    console.log(err);
-                    this.setState({ error: 1 })
-                });
+            let idUser = JSON.parse(localStorage.getItem("user")).idUser;
+            this.setState({ timeRecord: { user: { idUser }, ...data, isApproved: false, isPaid: false } }, () => {
+                console.log(this.state.timeRecord)
+                TimeRecordService.create(this.state.timeRecord)
+                    .then(response => {
+                        this.setState({ timeRecord: response.data });
+                        this.formRef.current.resetFields();
+                        this.setState({ error: 0 });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        this.setState({ error: 1 })
+                    });
+            })
+
         };
 
-        const onAlertClose = ()=>{
-            this.setState({error: -1})
+        const onAlertClose = () => {
+            this.setState({ error: -1 })
         }
 
         const onReset = () => {
@@ -117,12 +123,12 @@ class Hours extends React.Component {
             this.setState({ ...this.state, timeRecord: { timesheetId: value } })
         };
 
-        const alerta = (type)=> {
+        const alerta = (type) => {
             switch (type) {
                 case "success":
-                    return <Alert message="Hours saved" type="success" showIcon closable onClose={onAlertClose}/>       
+                    return <Alert message="Hours saved" type="success" showIcon closable onClose={onAlertClose} />
                 default:
-                    return <Alert message="Error in the system. Try again later." type="error" showIcon closable onClose={onAlertClose}/>
+                    return <Alert message="Error in the system. Try again later." type="error" showIcon closable onClose={onAlertClose} />
             }
         }
         return (
@@ -224,13 +230,13 @@ class Hours extends React.Component {
                 {this.state.error === 0 ? (
                     alerta("success")
                 ) : null}
-                {this.state.error === 1? (
+                {this.state.error === 1 ? (
                     alerta("error")
                 ) : null}
             </div>
         )
     }
-    
+
 };
 
 export default Hours;
