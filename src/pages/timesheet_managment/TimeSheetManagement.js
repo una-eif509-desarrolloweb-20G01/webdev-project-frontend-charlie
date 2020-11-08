@@ -218,21 +218,29 @@ class TimeSheetManagement extends React.Component {
                 title: 'Employee',
                 render: (timesheet) => timesheet.name,
                 width: '20%',
+                sortDirections: ["ascend", "descend"],
+                sorter: (a, b) => a.name.length - b.name.length
             },
             {
                 title: 'Non approved hours',
                 render: (timesheet) => timesheet.totalHours - timesheet.approvedHours,
                 width: '20%',
+                sortDirections: ["ascend", "descend"],
+                sorter: (a, b) => a.approvedHours - b.approvedHours,
             },
             {
                 title: 'Non paid hours',
                 render: (timesheet) => timesheet.totalHours - timesheet.paidHours,
                 width: '20%',
+                sortDirections: ["ascend", "descend"],
+                sorter: (a, b) => a.paidHours - b.paidHours,
             },
             {
                 title: 'Total Hours',
                 render: (timesheet) => timesheet.totalHours,
                 width: '20%',
+                sortDirections: ["ascend", "descend"],
+                sorter: (a, b) => a.totalHours - b.totalHours,
             },
             {
                 title: 'Approve',
@@ -328,6 +336,7 @@ class TimeSheetManagement extends React.Component {
                     onOk={handleOk}
                     confirmLoading={this.state.modal.modalLoading}
                     onCancel={handleCancel}
+                    showSorterTooltip={true}
                 >
                     <p>{this.state.modal.modalText}</p>
                 </Modal>
