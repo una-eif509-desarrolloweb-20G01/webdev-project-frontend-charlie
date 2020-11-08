@@ -1,7 +1,7 @@
 import React from "react";
 import TimeSheetService from "../../services/timesheet.service";
 import DepartmentService from "../../services/department.service";
-import { Descriptions, Button, Select, Table, Divider, Checkbox, Modal } from 'antd';
+import { Descriptions, Button, Select, Table, Divider, Modal } from 'antd';
 import './TimeSheetManagement.css';
 import TimeRecordService from "../../services/timerecord.service";
 const { Option } = Select;
