@@ -99,7 +99,7 @@ function App() {
                                 </Link>
                             </Menu.Item>
                             <SubMenu key="SubMenu" icon={<SettingOutlined />} title="Management">
-                                <Menu.Item key="Time Sheet Managment" icon={<CopyFilled />}>
+                                <Menu.Item key="Time Sheet Management" icon={<CopyFilled />}>
                                     <Link to={"/timesheetManagement"} className="nav-link">
                                         Time Sheet Management
                                     </Link>

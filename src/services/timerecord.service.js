@@ -17,6 +17,14 @@ const update = (data) => {
     return http.put(`/timeRecords/`, data, { headers: authHeader() });
 };
 
+const approveByTimeSheet = (data) => {
+    return http.put(`/timeRecords/timeSheet/{id}/approve`, data, { headers: authHeader() });
+};
+
+const paidByTimeSheet = (data) => {
+    return http.put(`/timeRecords/timeSheet/{id}/paid`, data, { headers: authHeader() });
+};
+
 const remove = id => {
     return http.delete(`/timeRecords/${id}`, { headers: authHeader() });
 };
@@ -28,4 +36,6 @@ export default {
     create,
     update,
     remove,
+    approveByTimeSheet,
+    paidByTimeSheet
 };
