@@ -7,7 +7,7 @@ import {
     UserOutlined
 } from '@ant-design/icons';
 import './Home.css';
-
+import AuthService from "../../services/auth.service"
 var data = [
     {
         title: 'Department Management',
@@ -55,10 +55,9 @@ class Home extends React.Component {
     formRef = React.createRef();
     constructor(props) {
         super(props)
-        
+
         data.forEach(element => {
-            console.log()
-            if (this.props.isAdminUser || element.isPublic) {
+            if ( AuthService.isAdminUser() || element.isPublic) {
                 element.isEnabled = true;
             } else
                 element.isEnabled = false;

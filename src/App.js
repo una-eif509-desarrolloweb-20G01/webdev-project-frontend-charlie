@@ -137,7 +137,7 @@ const App = (props) => {
                     <div className="site-layout-content">
                         <Switch>
                             <Route exact path={["/", "/home"]}
-                                component={() => <Home isAdminUser={isAdminUser} />}
+                                component={Home}
                             />
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/timesheet" component={TimeSheet} />
