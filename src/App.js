@@ -16,7 +16,7 @@ import './App.css';
 
 import AuthService from "./services/auth.service";
 import Login from "./pages/Login";
-import Home from "./pages/Home";
+import Home from "./pages//home/Home";
 import TimeSheet from "./pages/TimeSheets/TimeSheet";
 import Signup from "./pages/signup/SignUp";
 import Department from "./pages/department/Department";
