@@ -306,7 +306,7 @@ const User = (props) => {
   const label = `${state.checked ? 'Checked' : 'Unchecked'}-${state.disabled ? 'Disabled' : 'Enabled'}`;
   return (
     <div>
-      <h1>User Management {currentUser.username}..</h1>
+      <h1>User Management</h1>
       <Divider />
       <Table
         rowKey={userList => userList.id}

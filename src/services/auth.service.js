@@ -35,6 +35,16 @@ const getCurrentUser = () => {
     return JSON.parse(localStorage.getItem("user"));
 };
 
+const isAdminUser = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+        const result = user.roleList.find(e => { return e.name == "ROLE_ADMIN" }) != null;
+        console.log(result);
+        return result;
+    }
+    return false;
+};
+
 const isLoggedIn = () => {
     return JSON.parse(localStorage.getItem("user.headers")) ? true : false;
 };
@@ -45,5 +55,6 @@ export default {
     login,
     logout,
     getCurrentUser,
-    isLoggedIn
+    isLoggedIn,
+    isAdminUser
 };

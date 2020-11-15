@@ -1,3 +1,7 @@
 #submit-btn.ant-btn {
     margin-right: 8px;
 }
+
+.disabled-card{
+    cursor: no-drop;
+}

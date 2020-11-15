@@ -10,7 +10,7 @@ import { EyeOutlined, PlusOutlined } from '@ant-design/icons';
 
 
 import TimeSheetService from "../../services/timesheet.service";
-
+import AuthService from "../../services/auth.service"
 const initialPriorityListState = [
 ];
 /**
@@ -40,6 +40,7 @@ const TimeSheet = (props) => {
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({ "visible": false });
   const [inputName, setInputName] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   /**
    * Modal functions
@@ -92,7 +93,7 @@ const TimeSheet = (props) => {
    * Create Time Sheets functions
    * *****************************
   */
- 
+
   const createTimesheet = () => {
     setLoading(true);
     let data = { 'name': inputName };
@@ -118,7 +119,9 @@ const TimeSheet = (props) => {
   */
 
   useEffect(() => {
+    setIsAdmin(AuthService.isAdminUser);
     getAllThimeSheetsMethod();
+
   }, []);
 
 
@@ -197,7 +200,9 @@ const TimeSheet = (props) => {
       <h1>Time Sheets</h1>
       <>
         <Tooltip title="Create Time Sheet">
-          <Button onClick={showModal} type="primary" shape="circle" icon={<PlusOutlined />} />
+          <Button
+            disabled={!isAdmin}
+            onClick={showModal} type="primary" shape="circle" icon={<PlusOutlined />} />
         </Tooltip>
 
         <Modal title="Create New Time Sheet" visible={state.visible} onCancel={handleCancel}

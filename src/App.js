@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import {
     ClockCircleFilled,
     LogoutOutlined,
+    UserOutlined,
     HomeFilled,
     CopyFilled,
     LoginOutlined,
@@ -24,16 +25,18 @@ import TimeSheetDetails from "./pages/TimeSheets/TimeSheetDetails";
 import Hours from "./pages/hours/Hours";
 import User from "./pages/user/User";
 import TimeSheetManagement from "./pages/timesheet_managment/TimeSheetManagement";
-
+import { Redirect } from "react-router-dom";
 const { SubMenu } = Menu;
-function App() {
+const App = (props) => {
     const { Header, Content, Footer } = Layout;
     const [currentUser, setCurrentUser] = useState(undefined);
     const [currentPage, setCurrentPage] = useState(undefined);
     const [loggedIn, setLoggedIn] = useState(false);
+    const [isAdminUser, setIsAdminUser] = useState(false);
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
+        setIsAdminUser(AuthService.isAdminUser);
         const logged = AuthService.isLoggedIn();
         setLoggedIn(logged);
         if (user) {
@@ -45,6 +48,7 @@ function App() {
         AuthService.logout();
         setCurrentUser(undefined);
         setLoggedIn(AuthService.isLoggedIn());
+        window.location = '/login';
     };
     const handleClick = e => {
         console.log('click ', e);
@@ -98,19 +102,28 @@ function App() {
                                     Hours
                                 </Link>
                             </Menu.Item>
-                            <SubMenu key="SubMenu" icon={<SettingOutlined />} title="Management">
-                                <Menu.Item key="Time Sheet Management" icon={<CopyFilled />}>
-                                    <Link to={"/timesheetManagement"} className="nav-link">
-                                        Time Sheet Management
+                            {isAdminUser ?
+                                <SubMenu key="SubMenu" icon={<SettingOutlined />} title="Management">
+                                    <Menu.Item key="Time Sheet Management" icon={<CopyFilled />}>
+                                        <Link to={"/timesheetManagement"} className="nav-link">
+                                            Time Sheet Management
                                     </Link>
-                                </Menu.Item>
-                                <Menu.Item key="Department" icon={<PartitionOutlined />}>
-                                    <Link to={"/department"} className="nav-link">
-                                        Department
+                                    </Menu.Item>
+                                    <Menu.Item key="Department" icon={<PartitionOutlined />}>
+                                        <Link to={"/department"} className="nav-link">
+                                            Department Management
                                     </Link>
-                                </Menu.Item>
-                            </SubMenu>
-                            
+                                    </Menu.Item>
+                                    <Menu.Item key="User" icon={<UserOutlined />}>
+                                        <Link to={"/users"} className="nav-link" >
+                                            User Management
+                                    </Link>
+                                    </Menu.Item>
+                                </SubMenu>
+                                :
+                                <></>
+                            }
+
                             <Menu.Item key="Logout" icon={<LogoutOutlined />}>
                                 <Link to={"/logout"} className="nav-link" onClick={logOut}>
                                     Log out
@@ -121,12 +134,11 @@ function App() {
 
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
-                    <Breadcrumb style={{ margin: '16px 0' }}>
-                        <Breadcrumb.Item>{currentPage}</Breadcrumb.Item>
-                    </Breadcrumb>
                     <div className="site-layout-content">
                         <Switch>
-                            <Route exact path={["/", "/home"]} component={Home} />
+                            <Route exact path={["/", "/home"]}
+                                component={() => <Home isAdminUser={isAdminUser} />}
+                            />
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/timesheet" component={TimeSheet} />
                             <Route exact path="/timesheetManagement" component={TimeSheetManagement} />
